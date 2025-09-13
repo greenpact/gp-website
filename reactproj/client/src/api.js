@@ -2,7 +2,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api", // Your backend API base URL
+  //baseURL: "http://localhost:5000/api", / Your backend API base URL
+  baseURL: "https://gp-website.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
