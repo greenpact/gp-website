@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import partnerImage from "../assets/images/partners
-.png";
+import partnerImage from "../assets/images/partners.png";
 
 // Reusable component for animating sections on scroll
-// This component now handles opacity and transform states
 const AnimatedSection = ({ children, animation, threshold = 0.2 }) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -15,11 +13,9 @@ const AnimatedSection = ({ children, animation, threshold = 0.2 }) => {
   return (
     <div
       ref={ref}
-      className={`
-        ${animation}
-        transition-all duration-1000 ease-out
-        ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-      `}
+      className={`${animation} transition-all duration-1000 ease-out ${
+        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}
     >
       {children}
     </div>
@@ -70,29 +66,6 @@ export default function Partners() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      <style>
-        {`
-          @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-          @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-          }
-          .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-          }
-          .partner-card-anim { animation: slideInUp 0.6s ease-out forwards; }
-          .principle-card-anim { animation: slideInUp 0.6s ease-out forwards; }
-        `}
-      </style>
-
       <div className="container mx-auto px-4 py-20 pt-32">
         {/* Main Content Section - Initial page load animation */}
         <div className="animate-[scaleIn_0.7s_ease-out]">
@@ -164,15 +137,11 @@ export default function Partners() {
             {examplePartners.map((partner, index) => (
               <div
                 key={partner.id}
-                className={`
-                  bg-white p-6 rounded-lg shadow-md border border-gray-100 card-hover
-                  transition-all duration-500 ease-out
-                  ${
-                    partnersInView
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-10"
-                  }
-                `}
+                className={`bg-white p-6 rounded-lg shadow-md border border-gray-100 card-hover transition-all duration-500 ease-out ${
+                  partnersInView
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
                 style={{
                   transitionDelay: partnersInView ? `${index * 0.1}s` : "0s",
                 }}
@@ -225,15 +194,13 @@ export default function Partners() {
             ].map((principle, index) => (
               <div
                 key={index}
-                className={`
-                  p-6 rounded-lg shadow-md border card-hover ${principle.color}
-                  transition-all duration-500 ease-out
-                  ${
-                    principlesInView
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-10"
-                  }
-                `}
+                className={`p-6 rounded-lg shadow-md border card-hover ${
+                  principle.color
+                } transition-all duration-500 ease-out ${
+                  principlesInView
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
                 style={{
                   transitionDelay: principlesInView ? `${index * 0.15}s` : "0s",
                 }}
