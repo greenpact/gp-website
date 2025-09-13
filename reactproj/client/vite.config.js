@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: "/", // This is the crucial line to add
   server: {
     proxy: {
       "/api": {
@@ -15,8 +16,6 @@ export default defineConfig({
     historyApiFallback: true,
   },
   build: {
-    // We are keeping the rollupOptions as they can still be helpful
-    // but have removed the problematic 'alias' section.
     rollupOptions: {
       external: ["react-router"],
       output: {
