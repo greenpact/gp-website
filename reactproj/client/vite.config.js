@@ -14,4 +14,22 @@ export default defineConfig({
     },
     historyApiFallback: true,
   },
+  build: {
+    // This is the key part of the fix that you need to add.
+    // It forces the build to use the production version of react-router.
+    rollupOptions: {
+      external: ["react-router"],
+      output: {
+        globals: {
+          "react-router": "ReactRouter",
+        },
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      "react-router-dom": "react-router-dom/dist/main.js",
+      "react-router": "react-router/dist/main.js",
+    },
+  },
 });
