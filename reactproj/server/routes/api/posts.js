@@ -1,6 +1,9 @@
-const express = require("express");
+//const express = require("express");
+import express from 'express';
+
 const router = express.Router();
-const Post = require("../../models/Post");
+//const Post = require("../../models/Post");
+import { Post } from "../../models/Post.js";
 
 // @route   GET /api/posts
 // @desc    Get all posts
@@ -56,4 +59,5 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+//module.exports = router;
+export default router;

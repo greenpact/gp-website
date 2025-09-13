@@ -1,4 +1,6 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -18,6 +20,8 @@ import photoRoutes from "./routes/api/photos.js";
 import adminRoutes from "./routes/api/admin.js";
 import commentRoutes from "./routes/api/comments.js";
 import postRoutes from "./routes/api/posts.js";
+//const postRoutes = require("./routes/api/posts.js");
+
 import uploadRoutes from "./routes/api/Upload.js"; // Corrected casing to match file name
 
 // Get __dirname in ES Modules
@@ -46,6 +50,9 @@ mongoose
     process.exit(1);
   });
 
+
+
+  /*
 // --- Middleware ---
 app.use(
   cors({
@@ -55,6 +62,32 @@ app.use(
     credentials: true,
   })
 );
+*/
+
+// --- Middleware ---
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // The origin of the request, like http://<codespace-name>-<port>.app.github.dev
+      const allowedOrigins = [
+        "http://localhost:5173", // For local development
+        "https://*.github.dev", // For Codespaces development
+        "https://*.app.github.dev", // For Codespaces development
+      ];
+      if (!origin || allowedOrigins.some((allowedOrigin) => origin.startsWith(allowedOrigin.replace("*", "")))) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"],
+    credentials: true,
+  })
+);
+
+
+
 app.use(express.json());
 
 // --- Logging middleware ---

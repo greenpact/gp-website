@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import partnerImage from "../assets/images/partner.png";
+import partnerImage from "../assets/images/partners
+.png";
 
 // Reusable component for animating sections on scroll
 // This component now handles opacity and transform states

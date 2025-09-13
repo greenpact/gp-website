@@ -13,7 +13,7 @@ import ContactUs from "./pages/ContactUs";
 import Gallery from "./pages/Gallery";
 import AlbumDetail from "./pages/AlbumDetail";
 import Partners from "./pages/Partners";
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile";
 import Services from "./pages/Services";
 import WhoWeAre from "./pages/WhoWeAre";
 import WorkWithUs from "./pages/WorkWithUs";
@@ -25,7 +25,7 @@ import CommunityServicePage from "./pages/CommunityServicePage";
 import EditVacancyForm from "./components/EditVacancyForm";
 
 // Import Blog components
-import Blog from "./pages/blog";
+import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import AdminBlog from "./pages/AdminBlog";
 import AddEditPost from "./pages/AddEditPost"; // <-- added
