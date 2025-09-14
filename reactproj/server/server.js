@@ -50,23 +50,28 @@ mongoose
     process.exit(1);
   });
 
+// --------------------------------------------------------------------------
+// --- IMPORTANT: This static file serving middleware MUST BE at the TOP ---
+// It needs to handle all static assets (JS, CSS, images) before any other middleware
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
 
+// A catch-all route to serve the index.html for any client-side routes
+// This is essential for React Router to work properly
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+});
+// --------------------------------------------------------------------------
 
-/*
-// --- Middleware ---
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"],
-    credentials: true,
-  })
-);
-*/
+app.use(express.json());
 
-// --- Middleware ---
-app.use(
-  cors({
+// --- Logging middleware ---
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
+// --- CORS options for API routes only ---
+const corsOptions = {
     origin: (origin, callback) => {
       // The origin of the request, like http://<codespace-name>-<port>.app.github.dev
       const allowedOrigins = [
@@ -83,52 +88,26 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"],
     credentials: true,
-  })
-);
+};
 
-
-
-app.use(express.json());
-
-// --- Logging middleware ---
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
-});
-
-// --- Serve static files from the client's build directory ---
-// This middleware MUST be placed BEFORE any API routes
-app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
-
-// A catch-all route to serve the index.html for any client-side routes
-// This is essential for React Router to work properly
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
-});
 
 // --- API Routes ---
-app.use("/api/auth", authRoutes);
-app.use("/api/vacancies", vacancyRoutes);
-app.use("/api/applications", applicationRoutes);
-app.use("/api/contact", contactRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/albums", albumRoutes);
-app.use("/api/photos", photoRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/comments", commentRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/upload", uploadRoutes); // Mount the dedicated upload router
+// Apply cors() middleware to each API route individually
+app.use("/api/auth", cors(corsOptions), authRoutes);
+app.use("/api/vacancies", cors(corsOptions), vacancyRoutes);
+app.use("/api/applications", cors(corsOptions), applicationRoutes);
+app.use("/api/contact", cors(corsOptions), contactRoutes);
+app.use("/api/users", cors(corsOptions), userRoutes);
+app.use("/api/albums", cors(corsOptions), albumRoutes);
+app.use("/api/photos", cors(corsOptions), photoRoutes);
+app.use("/api/admin", cors(corsOptions), adminRoutes);
+app.use("/api/comments", cors(corsOptions), commentRoutes);
+app.use("/api/posts", cors(corsOptions), postRoutes);
+app.use("/api/upload", cors(corsOptions), uploadRoutes); // Mount the dedicated upload router
 
 // --- Serve static files for image uploads ---
 // IMPORTANT: Ensure your folder name is consistently capitalized as "Uploads"
 app.use("/uploads", express.static(path.join(__dirname, "Uploads")));
-
-// --- Root route ---
-// This route is no longer needed as the catch-all '*' will handle it.
-// If you uncomment it, it will take precedence and break your site.
-// app.get("/", (req, res) => {
-//   res.send("🌍 Your MERN Stack Backend Server is Running!");
-// });
 
 // --- Error Handling Middleware ---
 app.use((err, req, res, next) => {
