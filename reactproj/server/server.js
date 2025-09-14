@@ -52,7 +52,7 @@ mongoose
 
 
 
-  /*
+/*
 // --- Middleware ---
 app.use(
   cors({
@@ -96,9 +96,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// --- Serve static files ---
-// IMPORTANT: Ensure your folder name is consistently capitalized as "Uploads"
-app.use("/uploads", express.static(path.join(__dirname, "Uploads")));
+// --- Serve static files from the client's build directory ---
+// This middleware MUST be placed BEFORE any API routes
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+
+// A catch-all route to serve the index.html for any client-side routes
+// This is essential for React Router to work properly
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+});
 
 // --- API Routes ---
 app.use("/api/auth", authRoutes);
@@ -113,6 +119,17 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/upload", uploadRoutes); // Mount the dedicated upload router
 
+// --- Serve static files for image uploads ---
+// IMPORTANT: Ensure your folder name is consistently capitalized as "Uploads"
+app.use("/uploads", express.static(path.join(__dirname, "Uploads")));
+
+// --- Root route ---
+// This route is no longer needed as the catch-all '*' will handle it.
+// If you uncomment it, it will take precedence and break your site.
+// app.get("/", (req, res) => {
+//   res.send("🌍 Your MERN Stack Backend Server is Running!");
+// });
+
 // --- Error Handling Middleware ---
 app.use((err, req, res, next) => {
   console.error("Server error:", err.stack);
@@ -120,11 +137,6 @@ app.use((err, req, res, next) => {
     message: "Something went wrong on the server",
     error: err.message,
   });
-});
-
-// --- Root route ---
-app.get("/", (req, res) => {
-  res.send("🌍 Your MERN Stack Backend Server is Running!");
 });
 
 // --- Start server ---
